@@ -35,7 +35,7 @@ app.post('/login', function (req, res) {
 //insert
 app.post('/addusers', function(req, res) {
   console.log('inserted...',req.params.uname);
-    sql.executeSql("insert into user(uname,salary) values ('"+req.body.uname+"',"+req.body.salary+")"  , function (err, data) {
+    sql.executeSql("insert into user(uname,salary) values ('"+ req.body.uname +"',"+ req.body.salary +")"  , function (err, data) {
         if(err){
             return res.send({error: err});
         }
@@ -75,4 +75,3 @@ server.listen(8980, function (err) {
         console.log('Server started');
     }
 });
-
