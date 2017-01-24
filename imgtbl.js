@@ -6,8 +6,10 @@ var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 var imgSchema   = new Schema({
-    product_name: String,
-    product_img: String
+
+    pname: String,
+
+    pimg: String
 });
 
-module.exports = mongoose.model('Img', imgSchema);
+module.exports = mongoose.model('Product', imgSchema);
