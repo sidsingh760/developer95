@@ -31,11 +31,14 @@
 
             <!-- LOOP OVER THE TODOS IN $scope.todos -->
             <div  >
-                <table>
+                <table border="0">
                     <tr>
                         <th>Student id</th>
-                        <th>Student Name</th>
-                        <th>Student Marks</th>
+                        <th> Name</th>
+                        <th> Marks</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
+
                     </tr>
 
                     <tr ng-repeat="todo in todos">
@@ -57,9 +60,11 @@
     </div>
     <div>
         <form enctype="multipart/form-data" method="post">
-            <input type="text" placeholder="Student id" ng-model="formData._id" name="_id">
-            <br/><input type="text" placeholder="Student name" ng-model="formData.name" name="name">
-            <br/><input type="text" placeholder="Student marks" ng-model="formData.marks" name="marks">
+            <p>Student name:
+            <input type="text" placeholder="Student name" ng-model="formData.name" name="name"></p>
+            <p>Student marks:
+                <input type="text" placeholder="Student marks" ng-model="formData.marks" name="marks"></p>
+
             <button type="submit" ng-click="createTodo()">Add</button>
             <button type="submit" ng-click="updateTodo()">Update</button>
         </form>
