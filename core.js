@@ -16,7 +16,48 @@ function mainController($scope, $http) {
             console.log('Error: ' + data);
         });
 
-    // when submitting the add form, send the text to the node API
+
+    $scope.deleteTodo = function(id) {
+        $http.delete('/studs/' + id)
+            .success(function(data) {
+                $scope.todos = data;
+                console.log(data);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+    $scope.editTodo = function(sid) {
+        $http.get('/studs/'+ sid)
+            .success(function(datas) {
+                $scope.edittodos = datas;
+                $scope._id = $scope.edittodos._id;
+                console.log(datas);
+                $scope.formData =
+                    {
+                       // _id: $scope.edittodos._id,
+                        name: $scope.edittodos.name,
+                        marks: $scope.edittodos.marks
+                    }
+                console.log(datas);
+            })
+            .error(function(datas) {
+                console.log('Error: ' + datas);
+            });
+    };
+    $scope.updateTodo = function() {
+        console.log($scope._id);
+        $http.put('/studs/' + $scope._id, $scope.formData)
+            .success(function(data1) {
+                //$scope.formData = {}; // clear the form so our user is ready to enter another
+                $scope.todos = data1;
+                console.log(data1);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
     $scope.createTodo = function() {
         $http.post('/studs', $scope.formData)
             .success(function(data) {
@@ -28,18 +69,4 @@ function mainController($scope, $http) {
                 console.log('Error: ' + data);
             });
     };
-
-    // delete a todo after checking it
-    $scope.deleteTodo = function(id) {
-        $http.delete('/api/todos/' + id)
-            .success(function(data) {
-                $scope.todos = data;
-                console.log(data);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-
-
 }

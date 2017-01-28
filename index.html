@@ -30,30 +30,45 @@
         <div class="col-sm-4 col-sm-offset-4">
 
             <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <div class="checkbox" ng-repeat="todo in todos">
-                <label>
-                    <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.name }}
-                    <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.marks }}
-                </label>
+            <div  >
+                <table border="0">
+                    <tr>
+                        <th>Student id</th>
+                        <th> Name</th>
+                        <th> Marks</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
+
+                    </tr>
+
+                    <tr ng-repeat="todo in todos">
+
+                        <td>{{ todo._id }}</td>
+                        <td>{{ todo.name }}</td>
+                        <td>{{ todo.marks }}</td>
+                        <td>
+                            <button ng-click="deleteTodo(todo._id)" name="delete">Delete</button>
+                        </td>
+                        <td>
+                            <button ng-click="editTodo(todo._id)" name="edit">Edit</button>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
         </div>
     </div>
+    <div>
+        <form enctype="multipart/form-data" method="post">
+            <p>Student name:
+            <input type="text" placeholder="Student name" ng-model="formData.name" name="name"></p>
+            <p>Student marks:
+                <input type="text" placeholder="Student marks" ng-model="formData.marks" name="marks"></p>
 
-    <div id="todo-form" class="row">
-        <div class="col-sm-8 col-sm-offset-2 text-center">
-            <form>
-                <div class="form-group">
-
-                    <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
-            </form>
-        </div>
+            <button type="submit" ng-click="createTodo()">Add</button>
+            <button type="submit" ng-click="updateTodo()">Update</button>
+        </form>
     </div>
-
 </div>
-
 </body>
 </html>
