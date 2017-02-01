@@ -31,18 +31,22 @@
 
             <!-- LOOP OVER THE TODOS IN $scope.todos -->
             <div  >
-                <table border="0">
-                    <tr>
-                        <th>Student id</th>
-                        <th> Name</th>
-                        <th> Marks</th>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label >Search</label>
+                        <input type="text" ng-model="search" class="form-control" placeholder="Search">
+                    </div>
+                </form>
+                <table border="1" cellspacing="15">
+                   <thead> <tr>
+                        <th ng-click="sort('_id')">Id</th>
+                        <th ng-click="sort('name')"> Name</th>
+                        <th ng-click="sort('marks')"> Marks</th>
                         <th>Delete</th>
                         <th>Edit</th>
+                   </tr></thead>
 
-                    </tr>
-
-                    <tr ng-repeat="todo in todos">
-
+                    <tr ng-repeat="todo in todos |filter:search | orderBy:sortKey:reverse" >
                         <td>{{ todo._id }}</td>
                         <td>{{ todo.name }}</td>
                         <td>{{ todo.marks }}</td>
