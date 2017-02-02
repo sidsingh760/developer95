@@ -9,7 +9,6 @@
 
     <title>Node/Angular Todo App</title>
 
-    <!-- SCROLLS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
     <style>
         html                    { overflow-y:scroll; }
@@ -21,6 +20,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
     <script src="core.js"></script>
+
 
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
@@ -39,17 +39,25 @@
                 </form>
                 <table border="1" cellspacing="15">
                    <thead> <tr>
-                        <th ng-click="sort('_id')">Id</th>
+                        <!--<th ng-click="sort('_id')">Id</th>-->
                         <th ng-click="sort('name')"> Name</th>
-                        <th ng-click="sort('marks')"> Marks</th>
+                        <th ng-click="sort('email')"> email</th>
+                        <th>state</th>
+                        <th>city</th>
+                        <th>gender</th>
+                        <th>date</th>
                         <th>Delete</th>
                         <th>Edit</th>
                    </tr></thead>
 
-                    <tr ng-repeat="todo in todos |filter:search | orderBy:sortKey:reverse" >
-                        <td>{{ todo._id }}</td>
+                    <tr ng-repeat="todo in todos|orderBy:sortKey:reverse|filter:search">
+                        <!--<td>{{ todo._id }}</td>-->
                         <td>{{ todo.name }}</td>
-                        <td>{{ todo.marks }}</td>
+                        <td>{{ todo.email }}</td>
+                        <td>{{ todo.state }}</td>
+                        <td>{{ todo.city }}</td>
+                        <td>{{ todo.gender }}</td>
+                        <td>{{ todo.date }}</td>
                         <td>
                             <button ng-click="deleteTodo(todo._id)" name="delete">Delete</button>
                         </td>
@@ -58,6 +66,11 @@
                         </td>
                     </tr>
                 </table>
+                <dir-pagination-controls
+                        max-size="5"
+                        direction-links="true"
+                        boundary-links="true" >
+                </dir-pagination-controls>
             </div>
 
         </div>
@@ -66,13 +79,40 @@
         <form enctype="multipart/form-data" method="post">
             <p>Student name:
             <input type="text" placeholder="Student name" ng-model="formData.name" name="name"></p>
-            <p>Student marks:
-                <input type="text" placeholder="Student marks" ng-model="formData.marks" name="marks"></p>
+            <p>Student email:
+                <input type="text" placeholder="Student email" ng-model="formData.email" name="email"></p>
+            <p>Student state:
+                <select ng-model="formData.state">
+                    <option value="">--State--</option>
+                    <option ng-repeat="state in todostate" ng-change="fillcity(formData._id)" id="{{state._id}}" name="state" value="{{state.sname}}">{{state.sname}}
+                    <!--<option ng-options="state._id as state.sname for state in todostate" ng-change="fillcity(formData.state)" id="{{state._id}}" name="state" value="{{state.sname}}">{{state.sname}}-->
+                    </option>
+                    </option>
+                </select>
+            </p>
+            <p>City :
+                <select ng-model="formData.city">
+                    <option value="">--City--</option>
+                    <option ng-repeat="city in citys" id="{{city._id}}" name="city" value="{{city.cname}}">{{city.cname}}
+                    </option>
+                </select>
+            </p>
+            <p>Image:
+                <input type="file" name="img" ng-model='formData.img'></p>
+            <p>Gender:
+            <input type="radio" name="gender" value="male" ng-model='formData.gender' checked> Male
+            <input type="radio" name="gender" value="female" ng-model='formData.gender'> Female</p>
+            <p>Employee BOD:
+                <input class="form-control" type="date" placeholder="Choose a date" ng-model='formData.date'/>
+            </p><p>
+            Active :
+            <input type="checkbox" ng-model="formData.active"></p>
 
             <button type="submit" ng-click="createTodo()">Add</button>
             <button type="submit" ng-click="updateTodo()">Update</button>
         </form>
     </div>
 </div>
+<script src="dirPagination.js"></script>
 </body>
 </html>

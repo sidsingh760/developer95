@@ -4,6 +4,8 @@
 var express  = require('express');
 var app      = express();
 var Stud = require('./model/stud');
+var State = require('./model/state');
+var City = require('./model/city');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var router = express.Router();
@@ -30,16 +32,30 @@ app.get('/studs/:to_id', function(req, res) {
     });
 
 });
-
+app.get('/state', function(req, res) {
+    State.find(function(err, states) {
+        if (err)
+            res.send(err)
+        res.json(states);
+    });
+});
+app.get('/city/:id', function(req, res) {
+    City.find({ sid: {$eq: req.params.id}}).exec(function(err, cities) {
+        if (err)
+            res.send(err)
+        res.json(cities);
+    });
+});
 app.put('/studs/:to_id',function(req, res) {
     Stud.findById(req.params.to_id, function (err, studs) {
         if (err)
             res.send(err);
-       // res.send(studs);
-
-        //studs._id = req.body._id;
         studs.name = req.body.name;
-        studs.marks = req.body.marks;
+        studs.email = req.body.email;
+        studs.state = req.body.state;
+        studs.city = req.body.city;
+        studs.gender = req.body.gender;
+        studs.date = req.body.date;
         studs.save();
         Stud.find(function (err, products) {
             if (err)
@@ -48,10 +64,6 @@ app.put('/studs/:to_id',function(req, res) {
         });
     });
 })
-// app.get('/', function(req, res) {
-//     res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
-// });
-
 app.delete('/studs/:id', function(req, res) {
     Stud.remove({
         _id : req.params.id
@@ -70,7 +82,11 @@ app.delete('/studs/:id', function(req, res) {
 app.post('/studs', function(req, res) {
     Stud.create({
         name : req.body.name,
-        marks : req.body.marks,
+        email : req.body.email,
+        state : req.body.state,
+        city : req.body.city,
+        gender : req.body.gender,
+        date : req.body.date,
         id : req.body._id
 
     }, function(err, todo) {
@@ -85,7 +101,7 @@ app.post('/studs', function(req, res) {
         });
     });
 });
-var server = app.listen(8090, function () {
+var server = app.listen(89, function () {
     var host = server.address().address
     var port = server.address().port
     console.log("Example app listening at http://%s:%s", host, port)
