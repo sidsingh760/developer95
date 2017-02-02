@@ -7,7 +7,12 @@ var Schema       = mongoose.Schema;
 var studSchema   = new Schema({
     id: Number,
     name: String,
-    marks: String
+    email: String,
+    date: Date,
+    state: String,
+    city: String,
+    img: String,
+    gender: String
 });
 
 module.exports = mongoose.model('Stud', studSchema);
