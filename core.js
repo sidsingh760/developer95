@@ -2,51 +2,40 @@
  * Created by lcom64_two on 1/25/2017.
  */
 
-var scotchTodo = angular.module('scotchTodo', []);
+var scotchTodo = angular.module('app');
 
-function mainController($scope, $http) {
+scotchTodo.controller('mainController',function ($scope,$http) {
     $scope.formData = {};
+    $scope.v = "gdgsdfg";
 
-    $http.get('/studs')
-        .success(function(data) {
-            $scope.todos = data;
-            console.log(data);
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
+    $http.get("http://localhost:8090/studs").then(function(resp){
+        $scope.todos=resp.data;
+    });
+    //$scope.todostate=[];
+    $scope.getStates = function () {
+//$http..get()
+        $http.get("http://localhost:8090/state").then(function(response){
+            $scope.todostate=response.data;
+           // $scope.todostate = [{"sname":"Gujarat"},{"sname":"MH"},{"sname":"MP"}];
+            console.log($scope.todostate);
         });
-    $http.get('/state')
-        .success(function(sdata) {
-            $scope.todostate = sdata;
-            console.log(sdata);
-        })
-        .error(function(sdata) {
-            console.log('Error: ' + sdata);
-        });
+    }
+    $scope.getStates();
 
     $scope.fillcity = function(id) {
         $http.get('/city/' + id)
-            .success(function(data) {
-                $scope.citys = data;
+            .then(function(data) {
+                $scope.citys = data.data;
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
     };
 
-    // $http.get('/city')
-    //     .success(function(cdata) {
-    //         $scope.todocity = cdata;
-    //         console.log(cdata);
-    //     })
-    //     .error(function(cdata) {
-    //         console.log('Error: ' + cdata);
-    //     });
-
     $scope.deleteTodo = function(id) {
         $http.delete('/studs/' + id)
-            .success(function(data) {
-                $scope.todos = data;
+            .then(function(data) {
+                $scope.todos = data.data;
                 console.log(data);
             })
             .error(function(data) {
@@ -60,8 +49,8 @@ function mainController($scope, $http) {
     }
     $scope.editTodo = function(sid) {
         $http.get('/studs/'+ sid)
-            .success(function(datas) {
-                $scope.edittodos = datas;
+            .then(function(datas) {
+                $scope.edittodos = datas.data;
                 $scope._id = $scope.edittodos._id;
                 console.log(datas);
                 $scope.formData =
@@ -72,7 +61,9 @@ function mainController($scope, $http) {
                         state: $scope.edittodos.state,
                         city: $scope.edittodos.city,
                         date: $scope.edittodos.date,
-                        gender: $scope.edittodos.gender
+                        gender: $scope.edittodos.gender,
+                        active: $scope.edittodos.active,
+                        pimg: $scope.edittodos.pimg
                     }
                 console.log(datas);
             })
@@ -104,4 +95,4 @@ function mainController($scope, $http) {
                 console.log('Error: ' + data);
             });
     };
-}
+})
