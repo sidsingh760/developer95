@@ -5,14 +5,23 @@ var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 var studSchema   = new Schema({
-    id: Number,
+    // id: Number,
+    // name: String,
+    // email: String,
+    // date: Date,
+    // sname: String,
+    // cname: String,
+    // img: String,
+    // gender: String
+
     name: String,
     email: String,
-    date: Date,
+    dob: Date,
     state: String,
     city: String,
-    img: String,
-    gender: String
+    gender: String,
+    active : Boolean,
+    pimg: String
 });
 
 module.exports = mongoose.model('Stud', studSchema);
