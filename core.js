@@ -2,40 +2,64 @@
  * Created by lcom64_two on 1/25/2017.
  */
 
-var scotchTodo = angular.module('app');
+var scotchTodo = angular.module('scotchTodo', ['ngFileUpload']);
 
-scotchTodo.controller('mainController',function ($scope,$http) {
+function mainController($scope, $http, Upload) {
     $scope.formData = {};
-    $scope.v = "gdgsdfg";
+    // $scope.createTodo = function() {
+    //     $http.post('/studs', $scope.formData)
+    //         .success(function(data) {
+    //             $scope.formData = {}; // clear the form so our user is ready to enter another
+    //             $scope.todos = data;
+    //             console.log(data);
+    //         })
+    //         .error(function(data) {
+    //             console.log('Error: ' + data);
+    //         });
+    // };
 
-    $http.get("http://localhost:8090/studs").then(function(resp){
-        $scope.todos=resp.data;
-    });
-    //$scope.todostate=[];
-    $scope.getStates = function () {
-//$http..get()
-        $http.get("http://localhost:8090/state").then(function(response){
-            $scope.todostate=response.data;
-           // $scope.todostate = [{"sname":"Gujarat"},{"sname":"MH"},{"sname":"MP"}];
-            console.log($scope.todostate);
-        });
+    $scope.createTodo = function() {
+            Upload.upload({
+                url: '/studs',
+                method: 'POST',
+                data: $scope.formData
+            }).then(function (response) {
+                $scope.formData = {}; // clear the form so our user is ready to enter another
+                $scope.todos = data;
+                console.log(data);
+            })
     }
-    $scope.getStates();
+
+    $http.get('/studs')
+        .success(function(data) {
+            $scope.todos = data;
+            console.log(data);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
+    $http.get('/state')
+        .success(function(sdata) {
+            $scope.todostate = sdata;
+            console.log(sdata);
+        })
+        .error(function(sdata) {
+            console.log('Error: ' + sdata);
+        });
 
     $scope.fillcity = function(id) {
         $http.get('/city/' + id)
-            .then(function(data) {
-                $scope.citys = data.data;
+            .success(function(data) {
+                $scope.citys = data;
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
     };
-
     $scope.deleteTodo = function(id) {
         $http.delete('/studs/' + id)
-            .then(function(data) {
-                $scope.todos = data.data;
+            .success(function(data) {
+                $scope.todos = data;
                 console.log(data);
             })
             .error(function(data) {
@@ -49,8 +73,8 @@ scotchTodo.controller('mainController',function ($scope,$http) {
     }
     $scope.editTodo = function(sid) {
         $http.get('/studs/'+ sid)
-            .then(function(datas) {
-                $scope.edittodos = datas.data;
+            .success(function(datas) {
+                $scope.edittodos = datas;
                 $scope._id = $scope.edittodos._id;
                 console.log(datas);
                 $scope.formData =
@@ -61,9 +85,7 @@ scotchTodo.controller('mainController',function ($scope,$http) {
                         state: $scope.edittodos.state,
                         city: $scope.edittodos.city,
                         date: $scope.edittodos.date,
-                        gender: $scope.edittodos.gender,
-                        active: $scope.edittodos.active,
-                        pimg: $scope.edittodos.pimg
+                        gender: $scope.edittodos.gender
                     }
                 console.log(datas);
             })
@@ -84,15 +106,5 @@ scotchTodo.controller('mainController',function ($scope,$http) {
             });
     };
 
-    $scope.createTodo = function() {
-        $http.post('/studs', $scope.formData)
-            .success(function(data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.todos = data;
-                console.log(data);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-})
+
+}
