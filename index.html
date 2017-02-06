@@ -1,118 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 
-<!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="scotchTodo">
+<!-- define angular app -->
+<html ng-app="scotchApp">
+
 <head>
-    <!-- META -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
 
-    <title>Node/Angular Todo App</title>
-
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-    <style>
-        html                    { overflow-y:scroll; }
-        body                    { padding-top:50px; }
-        #todo-list              { margin-bottom:30px; }
-    </style>
+    <!-- SCROLLS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css"/>
 
     <!-- SPELLS -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
-    <script src="core.js"></script>
-
-
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+    <script src="./controller/core.js"></script>
 </head>
-<!-- SET THE CONTROLLER AND GET ALL TODOS -->
+
+<!-- define angular controller -->
 <body ng-controller="mainController">
-<div class="container">
-    <div id="todo-list" class="row">
-        <div class="col-sm-4 col-sm-offset-4">
 
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <div  >
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label >Search</label>
-                        <input type="text" ng-model="search" class="form-control" placeholder="Search">
-                    </div>
-                </form>
-                <table border="1" cellspacing="15">
-                   <thead> <tr>
-                        <!--<th ng-click="sort('_id')">Id</th>-->
-                        <th ng-click="sort('name')"> Name</th>
-                        <th ng-click="sort('email')"> email</th>
-                        <th>state</th>
-                        <th>city</th>
-                        <th>gender</th>
-                        <th>date</th>
-                        <th>Delete</th>
-                        <th>Edit</th>
-                   </tr></thead>
-
-                    <tr ng-repeat="todo in todos|orderBy:sortKey:reverse|filter:search">
-                        <!--<td>{{ todo._id }}</td>-->
-                        <td>{{ todo.name }}</td>
-                        <td>{{ todo.email }}</td>
-                        <td>{{ todo.state }}</td>
-                        <td>{{ todo.city }}</td>
-                        <td>{{ todo.gender }}</td>
-                        <td>{{ todo.date }}</td>
-                        <td>
-                            <button ng-click="deleteTodo(todo._id)" name="delete">Delete</button>
-                        </td>
-                        <td>
-                            <button ng-click="editTodo(todo._id)" name="edit">Edit</button>
-                        </td>
-                    </tr>
-                </table>
-                <dir-pagination-controls
-                        max-size="5"
-                        direction-links="true"
-                        boundary-links="true" >
-                </dir-pagination-controls>
-            </div>
-
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Angular Routing Example</a>
         </div>
+        <br>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#home"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
+            <li><a href="#login"><i class="fa fa-home"></i> Login</a></li>
+            <li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
+        </ul>
     </div>
-    <div>
-        <form enctype="multipart/form-data" method="post">
-            <p>Student name:
-            <input type="text" placeholder="Student name" ng-model="formData.name" name="name"></p>
-            <p>Student email:
-                <input type="text" placeholder="Student email" ng-model="formData.email" name="email"></p>
-            <p>Student state:
-                <select ng-model="formData.state">
-                    <option value="">--State--</option>
-                    <option ng-repeat="state in todostate" ng-change="fillcity(formData._id)" id="{{state._id}}" name="state" value="{{state.sname}}">{{state.sname}}
-                    <!--<option ng-options="state._id as state.sname for state in todostate" ng-change="fillcity(formData.state)" id="{{state._id}}" name="state" value="{{state.sname}}">{{state.sname}}-->
-                    </option>
-                    </option>
-                </select>
-            </p>
-            <p>City :
-                <select ng-model="formData.city">
-                    <option value="">--City--</option>
-                    <option ng-repeat="city in citys" id="{{city._id}}" name="city" value="{{city.cname}}">{{city.cname}}
-                    </option>
-                </select>
-            </p>
-            <p>Image:
-                <input type="file" name="img" ng-model='formData.img'></p>
-            <p>Gender:
-            <input type="radio" name="gender" value="male" ng-model='formData.gender' checked> Male
-            <input type="radio" name="gender" value="female" ng-model='formData.gender'> Female</p>
-            <p>Employee BOD:
-                <input class="form-control" type="date" placeholder="Choose a date" ng-model='formData.date'/>
-            </p><p>
-            Active :
-            <input type="checkbox" ng-model="formData.active"></p>
+</nav>
 
-            <button type="submit" ng-click="createTodo()">Add</button>
-            <button type="submit" ng-click="updateTodo()">Update</button>
-        </form>
-    </div>
+<div id="main">
+    <div ng-view></div>
 </div>
-<script src="dirPagination.js"></script>
+
+<footer class="text-center">
+    <p>View the tutorial on <a
+            href="http://scotch.io/tutorials/javascript/single-page-apps-with-angularjs-routing-and-templating">Scotch.io</a>
+    </p>
+    <p>View a tutorial on <a href="http://scotch.io/tutorials/javascript/animating-angularjs-apps-ngview">Animating Your
+        Angular Single Page App</a></p>
+</footer>
+
 </body>
+
 </html>

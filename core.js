@@ -1,110 +1,97 @@
 /**
- * Created by lcom64_two on 1/25/2017.
+ * Created by lcom64_two on 2/6/2017.
  */
 
-var scotchTodo = angular.module('scotchTodo', ['ngFileUpload']);
+var scotchApp = angular.module('scotchApp', ['ngRoute']);
+scotchApp.config(['$routeProvider', '$locationProvider',
+    function ($routeProvider, $locationProvider) {
+        $routeProvider.when('/home', {
+            templateUrl: './page/home.html',
+            controller: 'HomeController'
+        })
+        $routeProvider.when('/about', {
+            templateUrl: './page/about.html',
+            controller: 'AboutController'
+        })
+        $routeProvider.when('/customer', {
+            templateUrl: './page/task2.html',
+            controller: 'mainController'
+        })
+        $routeProvider.when('/login', {
+            templateUrl: './page/login.html',
+            controller: 'LoginController'
+        }).otherwise({
+            redirectTo: 'index.html'
+        });
+    }
+]);
+// scotchApp.config(function($routeProvider) {
+//     $routeProvider
+//
+//         .when('/about', {
+//             templateUrl : 'page/about.html',
+//             controller  : 'aboutController'
+//         })
+//         .when('/', {
+//             templateUrl : 'page/login.html',
+//             controller  : 'LoginController'
+//         })
+//         .when('/contact', {
+//             templateUrl : 'page/contact.html',
+//             controller  : 'contactController'
+//         });
+// });
+scotchApp.controller("LoginController", function ($scope, $location) {
+    $scope.login = function () {
+        var username = $scope.user.name;
+        var password = $scope.user.password;
+        if (username == "admin" && password == "admin") {
+            $location.path("/customer");
+        } else {
+            alert('invalid username and password');
+        }
+    };
+});
 
-function mainController($scope, $http, Upload) {
+scotchApp.controller('AboutController', function ($scope) {
+    $scope.message = 'Look! I am an about page.';
+});
+// scotchApp.controller('mainController', function($scope) {
+//     $scope.username = "Admin"
+//     $scope.password = "Admin"
+//
+//     $scope.login = function () {
+//         console.log("inside....")
+//         if($scope.username=="admin" && $scope.password=="admin")
+//         {
+//             console.log("done....");
+//             $window.location.href = '#/customer';
+//         }
+//     }
+// });
+scotchApp.controller('HomeController', function ($scope) {
+    $scope.message = 'Contact us! JK. This is just a demo.';
+});
+
+scotchApp.controller('mainController', function ($scope, $http) {
     $scope.formData = {};
-    // $scope.createTodo = function() {
-    //     $http.post('/studs', $scope.formData)
-    //         .success(function(data) {
-    //             $scope.formData = {}; // clear the form so our user is ready to enter another
-    //             $scope.todos = data;
-    //             console.log(data);
-    //         })
-    //         .error(function(data) {
-    //             console.log('Error: ' + data);
-    //         });
-    // };
-
-    $scope.createTodo = function() {
-            Upload.upload({
-                url: '/studs',
-                method: 'POST',
-                data: $scope.formData
-            }).then(function (response) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.todos = data;
-                console.log(data);
-            })
-    }
-
-    $http.get('/studs')
-        .success(function(data) {
-            $scope.todos = data;
-            console.log(data);
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
+    $scope.getStates = function () {
+        $http.get("http://localhost:8082/cust").then(function(resp){
+            $scope.todostate=resp.data;
+            console.log($scope.todostate);
         });
-    $http.get('/state')
-        .success(function(sdata) {
-            $scope.todostate = sdata;
-            console.log(sdata);
-        })
-        .error(function(sdata) {
-            console.log('Error: ' + sdata);
-        });
-
-    $scope.fillcity = function(id) {
-        $http.get('/city/' + id)
-            .success(function(data) {
-                $scope.citys = data;
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-    $scope.deleteTodo = function(id) {
-        $http.delete('/studs/' + id)
-            .success(function(data) {
-                $scope.todos = data;
-                console.log(data);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
-
-    $scope.sort = function(keyname){
-        $scope.sortKey = keyname;   //set the sortKey to the param passed
-        $scope.reverse = !$scope.reverse; //if true make it false and vice versa
     }
-    $scope.editTodo = function(sid) {
-        $http.get('/studs/'+ sid)
-            .success(function(datas) {
-                $scope.edittodos = datas;
-                $scope._id = $scope.edittodos._id;
-                console.log(datas);
-                $scope.formData =
-                    {
-                        // _id: $scope.edittodos._id,
-                        name: $scope.edittodos.name,
-                        email: $scope.edittodos.email,
-                        state: $scope.edittodos.state,
-                        city: $scope.edittodos.city,
-                        date: $scope.edittodos.date,
-                        gender: $scope.edittodos.gender
-                    }
-                console.log(datas);
-            })
-            .error(function(datas) {
-                console.log('Error: ' + datas);
-            });
-    };
-    $scope.updateTodo = function() {
-        console.log($scope._id);
-        $http.put('/studs/' + $scope._id, $scope.formData)
-            .success(function(data1) {
-                //$scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.todos = data1;
-                console.log(data1);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-    };
+    $scope.getStates();
 
-
-}
+    $http.get("http://localhost:8082/newcust").then(function(resp){
+        $scope.todos=resp.data;
+    });
+    // $http.get('/newcust')
+    //     .success(function (data) {
+    //         $scope.todonew = data;
+    //         console.log(data);
+    //     })
+    //     .error(function (data) {
+    //         console.log('Error: ' + data);
+    //     });
+});
