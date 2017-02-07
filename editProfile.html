@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3>Create your Profile!</h3>
+</div>
+<div class="modal-body">
+
+    <div style="padding:10px;">
+
+        <div style="width: 350px; height: 100px ">
+
+            <table>
+                <tr>
+                    <td><h4>Customer name:</h4></td>
+                    <td><input type="text" name="name" placeholder="Customer's name" ng-model="formData.name" name="name"></td>
+                </tr>
+                <tr>
+                    <td><h4>parent:</h4></td>
+                    <td><select ng-model="formData.cname" name="cname">
+                        <option ng-repeat="cust in todos" id="{{cust._id}}" value="{{cust.name}}">
+                            {{cust.name}}
+                        </option>
+                    </select></td>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary" ng-click="upTodo()">Save</button>
+
+    <button class="btn btn-warning" ng-click="canceldelete()">Cancel</button>
+</div>
