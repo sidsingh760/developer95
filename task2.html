@@ -1,0 +1,54 @@
+<div class="jumbotron text-center">
+    <h1>Customer Page</h1>
+    <div>
+        <body ng-controller="mainController">
+
+
+        <form enctype="multipart/form-data" method="post">
+            <table>
+                <tr>
+                    <td>Customer name:</td>
+                    <td><input type="text" placeholder="Customer's name" ng-model="formData.name" name="name"></td>
+                </tr>
+                <tr>
+                    <td>parent:</td>
+                    <td><select ng-model="formData.cname">
+                        <option value="">--names--</option>
+                        <option ng-repeat="cust in todostate" id="{{cust._id}}" value="{{cust.cname}}">
+                            {{cust.cname}}
+                        </option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" ng-click="createTodo()">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <br/><br/>
+        <table border="1" cellspacing="15">
+            <thead>
+            <tr>
+                <th ng-click="sort('name')"> Parent</th>
+                <th ng-click="sort('cname')"> New customer</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+
+            <tr ng-repeat="todo in todos | orderBy:sortKey:reverse ">
+                <td>{{ todo.name }}</td>
+                <td>{{ todo.cname }}</td>
+                <td>
+                    <button ng-click="deleteTodo(todo._id)" name="delete">Delete</button>
+                </td>
+                <td>
+                    <button ng-click="editTodo(todo._id)" name="edit">Edit</button>
+                </td>
+            </tr>
+        </table>
+        </body>
+    </div>
+</div>
