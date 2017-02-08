@@ -22,7 +22,7 @@ app.use(bodyParser.json({type: 'application/vnd.api+json' }));
 
 var storage = multer.diskStorage({
     destination: function (request, file, callback) {
-        callback(null, './uploads');
+        callback(null, './pages/uploads');
     },
     filename: function (request, file, callback) {
         console.log("file:"+file.originalname);
@@ -39,13 +39,7 @@ app.get('/newcust/:to_id', function(req, res) {
         res.json(cust); // return all todos in JSON format
     });
 });
-// app.get('/cust', function(req, res) {
-//     Cust.find(function(err, custs) {
-//         if (err)
-//             res.send(err)
-//         res.json(custs);
-//     });
-// });
+
 app.get('/newcust', function(req, res) {
     NewCust.find(function(err, newcust) {
         if (err)
