@@ -2,7 +2,7 @@
  * Created by lcom64_two on 2/6/2017.
  */
 
-var scotchApp = angular.module('scotchApp', ['ngRoute', 'ui.bootstrap']);
+var scotchApp = angular.module('scotchApp', ['ngRoute', 'ui.bootstrap', 'ngFileUpload']); //, 'ngFileUpload'
 scotchApp.config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
         $routeProvider.when('/home', {
@@ -73,7 +73,7 @@ scotchApp.controller('HomeController', function ($scope) {
     $scope.message = 'Contact us! JK. This is just a demo.';
 });
 
-scotchApp.controller('mainController', function ($scope, $http, $modal) {
+scotchApp.controller('mainController', function ($scope, $http, $modal, Upload) {
     $scope.formData = {};
     $scope._id;
     // $scope.getStates = function () {
@@ -87,24 +87,40 @@ scotchApp.controller('mainController', function ($scope, $http, $modal) {
     $http.get("http://localhost:8082/newcust").then(function (resp) {
         $scope.todos = resp.data;
     });
-
+    $scope.sort = function (keyname) {
+        $scope.sortKey = key
+        $scope.reverse = !$scope.reverse;
+    }
     $scope.getAllcust = function () {
         $http.get("http://localhost:8082/newcust").then(function (resp) {
             $scope.todos = resp.data;
         });
     }
+    // $scope.createTodo = function () {
+    //     $http.post('http://localhost:8082/newcust', $scope.formData)
+    //         .success(function (data) {
+    //             $scope.formData = {}; // clear the form so our user is ready to enter another
+    //             $scope.todos = data;
+    //             console.log(data);
+    //         })
+    //         .error(function (data) {
+    //             console.log('Error: ' + data);
+    //         });
+    // };
     $scope.createTodo = function () {
-        $http.post('http://localhost:8082/newcust', $scope.formData)
-            .success(function (data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.todos = data;
-                console.log(data);
-            })
-            .error(function (data) {
-                console.log('Error: ' + data);
-            });
+        // alert($scope.formData)
+        Upload.upload({
+            url: 'http://localhost:8082/newcust',
+            method: 'POST',
+            data: {
+                'name': $scope.formData.name,
+                'cname': $scope.formData.cname,
+                'pimg': $scope.formData.pimg
+            }
+        }).then(function (response) {
+            $scope.getAllcust();
+        })
     };
-
 
     $scope.showForm1 = function (id) {
         $scope.message = "Show Form Button Clicked";
@@ -138,8 +154,6 @@ scotchApp.controller('mainController', function ($scope, $http, $modal) {
                         name: $scope.editProfiledt.name,
                         cname: $scope.editProfiledt.cname.toString()
                     }
-
-
             })
         var modalInstance1 = $modal.open({
             templateUrl: './page/editProfile.html',
@@ -165,17 +179,13 @@ scotchApp.controller('mainController', function ($scope, $http, $modal) {
 
 
         $scope.upTodo = function () {
-
             $http.put('http://localhost:8082/newcust/' + $scope._id, $scope.formData)
                 .success(function (data) {
-
                     console.log(data);
                     $scope.getAllcust()
                     $modalInstance.dismiss();
                 })
         };
-
-
         // var ModalInstanceCtrl1 = function($scope, $http,$modalInstance) {
         //     $scope.deleteTodo = function() {
         //         $http.delete('/http://localhost:8082/newcust/' + $scope.id)
